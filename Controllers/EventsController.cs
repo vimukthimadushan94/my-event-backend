@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using my_event_backend.Data;
@@ -8,6 +9,7 @@ namespace my_event_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EventsController : ControllerBase
     {
         private readonly DataContext _context;
@@ -19,8 +21,8 @@ namespace my_event_backend.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Event>>> GetAllEvents()
         {
-
-            var events = await _context.Events.ToListAsync();
+         
+            var events = await _context.Events.Include(e => e.Users).ToListAsync();
 
             return Ok(events);
         }
