@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Identity;
 
 namespace my_event_backend.Models
 {
@@ -8,6 +9,10 @@ namespace my_event_backend.Models
         public required string Name { get; set; }
         public required string Color { get; set; } = string.Empty;
         public required string Description { get; set; } = string.Empty ;
+
+        public string? CreatedByUserId { get; set; }
+        public IdentityUser? CreatedByUser { get; set; }
+
         public List<User> Users { get; set; }
     }
 }
