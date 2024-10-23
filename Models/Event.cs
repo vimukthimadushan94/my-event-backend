@@ -13,6 +13,6 @@ namespace my_event_backend.Models
         public string? CreatedByUserId { get; set; }
         public IdentityUser? CreatedByUser { get; set; }
 
-        public List<User> Users { get; set; }
+        public List<User> Users { get; set; } = new List<User>();
     }
 }

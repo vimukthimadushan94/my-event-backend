@@ -34,7 +34,7 @@ namespace my_event_backend.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("EventUser");
+                    b.ToTable("EventUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -271,7 +271,7 @@ namespace my_event_backend.Migrations
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("my_event_backend.Models.User", b =>

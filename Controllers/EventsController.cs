@@ -22,7 +22,10 @@ namespace my_event_backend.Controllers
         public async Task<ActionResult<List<Event>>> GetAllEvents()
         {
          
-            var events = await _context.Events.Include(e => e.Users).ToListAsync();
+            var events = await _context.Events
+                .Include(u => u.Users)
+                .Include(e => e.CreatedByUser)
+                .ToListAsync();
 
             return Ok(events);
         }
@@ -39,6 +42,15 @@ namespace my_event_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Event>>> CreateEvent(Event eventItem)
         {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine(userId);
+
+            if (userId == null)
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            eventItem.CreatedByUserId = userId;
             _context.Events.Add(eventItem);
             await _context.SaveChangesAsync();
             return Ok(await _context.Events.ToListAsync());
