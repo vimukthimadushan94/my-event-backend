@@ -6,7 +6,7 @@ namespace my_event_backend.Models
 {
     public class User : IdentityUser
     {
-        public List<Event> Events { get; } = [];
+        public List<Event> Events { get; set; }
 
     }
 }

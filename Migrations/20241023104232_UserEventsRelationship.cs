@@ -5,7 +5,7 @@
 namespace my_event_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserEventRelationship : Migration
+    public partial class UserEventsRelationship : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

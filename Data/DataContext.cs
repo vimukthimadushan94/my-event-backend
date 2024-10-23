@@ -13,9 +13,8 @@ namespace my_event_backend.Data
             
         }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Event> Events {  get; set; }
-        public DbSet<UserEvent> UserEvent {  get; set; }
 
-   
     }
 }

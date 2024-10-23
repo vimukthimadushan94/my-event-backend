@@ -12,8 +12,8 @@ using my_event_backend.Data;
 namespace my_event_backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241021081936_AddUserEventRelationship")]
-    partial class AddUserEventRelationship
+    [Migration("20241023104232_UserEventsRelationship")]
+    partial class UserEventsRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
