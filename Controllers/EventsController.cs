@@ -43,7 +43,6 @@ namespace my_event_backend.Controllers
         public async Task<ActionResult<List<Event>>> CreateEvent(Event eventItem)
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine(userId);
 
             if (userId == null)
             {
