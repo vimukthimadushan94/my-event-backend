@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using my_event_backend.Data;
+using my_event_backend.Dtos;
 using my_event_backend.Models;
 
 namespace my_event_backend.Controllers
@@ -44,39 +45,40 @@ namespace my_event_backend.Controllers
             return eventItem;
         }
 
-        // PUT: api/EventItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEventItem(string id, EventItem eventItem)
+        public async Task<IActionResult> PutEventItem(string id, EventItem updateEventItem)
         {
-            if (id != eventItem.Id)
-            {
-                return BadRequest();
-            }
+            var dbEvent = await _context.EventsItems
+                               .Include(e => e.Event)
+                               .FirstOrDefaultAsync(e => e.Id == id);
+            if (dbEvent is null)
+                return NotFound("The Event not found");
 
-            _context.Entry(eventItem).State = EntityState.Modified;
+            dbEvent.Name = updateEventItem.Name;
+            dbEvent.Description = updateEventItem.Description;
+            dbEvent.From = updateEventItem.From;
+            dbEvent.To = updateEventItem.To;
+            dbEvent.Price = updateEventItem.Price;
+            dbEvent.Location = updateEventItem.Location;
+            dbEvent.UpdatedAt = DateTime.Now;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EventItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return NoContent();
+            var responseDto = new EventItemUpdateDto
+            {
+                Name = dbEvent.Name,
+                Description = dbEvent.Description,
+                From = dbEvent.From,
+                To = dbEvent.To,
+                Price = dbEvent.Price,
+                Location = dbEvent.Location,
+                Event = dbEvent.Event
+            };
+
+            return Ok(responseDto);
         }
 
         // POST: api/EventItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<EventItem>> PostEventItem(EventItem eventItem)
         {

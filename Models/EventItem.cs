@@ -17,7 +17,7 @@ namespace my_event_backend.Models
         public DateTime To { get;set; }
         public int Price { get; set; }
         public string Location { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; }
         public Event? Event { get; set; }
     }
