@@ -11,8 +11,8 @@ namespace my_event_backend.Models
         public required string Description { get; set; } = string.Empty ;
 
         public string? CreatedByUserId { get; set; }
-        public IdentityUser? CreatedByUser { get; set; }
+        public ApplicationUser? CreatedByUser { get; set; }
 
-        public List<User> Users { get; set; } = new List<User>();
+        public List<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
     }
 }
