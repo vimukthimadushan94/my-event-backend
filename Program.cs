@@ -32,10 +32,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services
-    .AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<DataContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+    .AddEntityFrameworkStores<DataContext>();
 
 var app = builder.Build();
 
@@ -46,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+app.MapIdentityApi<ApplicationUser>();
 app.UseAuthorization();
 
 app.MapControllers();

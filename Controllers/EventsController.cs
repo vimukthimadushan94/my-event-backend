@@ -42,6 +42,7 @@ namespace my_event_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Event>>> CreateEvent(Event eventItem)
         {
+            Console.WriteLine("testssss");
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
