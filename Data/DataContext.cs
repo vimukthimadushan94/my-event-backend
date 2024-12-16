@@ -14,19 +14,18 @@ namespace my_event_backend.Data
         {
             base.OnModelCreating(builder);
 
-            // Configure the one-to-many relationship for CreatedByUser
             builder.Entity<Event>()
-                .HasOne(e => e.CreatedByUser) // Event.CreatedByUser
-                .WithMany() // No navigation property in ApplicationUser for this relationship
+                .HasOne(e => e.CreatedByUser) 
+                .WithMany()
                 .HasForeignKey(e => e.CreatedByUserId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes if needed
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Configure the many-to-many relationship
+           
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.Events)
                 .WithMany(e => e.Users)
                 .UsingEntity<Dictionary<string, object>>(
-                    "UserEvent", // Join table name
+                    "UserEvent",
                     j => j.HasOne<Event>().WithMany().HasForeignKey("EventId"),
                     j => j.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId")
                 );

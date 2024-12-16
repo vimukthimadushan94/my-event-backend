@@ -42,7 +42,6 @@ namespace my_event_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Event>>> CreateEvent(Event eventItem)
         {
-            Console.WriteLine("testssss");
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
@@ -85,6 +84,16 @@ namespace my_event_backend.Controllers
 
             return Ok(await _context.Events.ToListAsync());
 
+        }
+
+        //get event items related to the specific event
+        [HttpGet("/{id}/eventItems")]
+        public async Task<ActionResult<EventItem>> GetEventItemsByEventId(int id)
+        {
+            var eventItems = await _context.EventsItems
+                .Where(x => x.EventId == id)
+                .ToListAsync();
+            return Ok(eventItems);
         }
     }
 }
