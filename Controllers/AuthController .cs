@@ -37,5 +37,20 @@ namespace my_event_backend.Controllers
 
             return Ok(new { message = "User registered successfully!" });
         }
+
+        [HttpGet("app-users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = _userManager.Users.ToList();
+            var userDtos = users.Select(user => new GetAllUsrsDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            }).ToList();
+
+            return Ok(userDtos);
+        }
     }
 }

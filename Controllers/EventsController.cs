@@ -87,7 +87,7 @@ namespace my_event_backend.Controllers
         }
 
         //get event items related to the specific event
-        [HttpGet("/{id}/eventItems")]
+        [HttpGet("/api/{id}/eventItems")]
         public async Task<ActionResult<EventItem>> GetEventItemsByEventId(int id)
         {
             var eventItems = await _context.EventsItems
