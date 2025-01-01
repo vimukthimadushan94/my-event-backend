@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -82,7 +83,7 @@ namespace my_event_backend.Controllers
 
         // POST: api/EventItems
         [HttpPost]
-        public async Task<ActionResult<EventItem>> PostEventItem(EventItem eventItem)
+        public async Task<ActionResult<EventItem>> PostEventItem([FromBody] EventItem eventItem)
         {
             _context.EventsItems.Add(eventItem);
             try

@@ -15,7 +15,10 @@ namespace my_event_backend.Models
         public string? Description { get; set; }
         public DateTime From  { get; set; }
         public DateTime To { get;set; }
+
+        [Range(0, int.MaxValue)]
         public int Price { get; set; }
+
         public string Location { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; }
