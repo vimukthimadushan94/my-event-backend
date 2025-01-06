@@ -14,7 +14,7 @@ namespace my_event_backend.Dtos
         public required DateTime To { get; set; }
 
         public int Price { get; set; }
-        
+
         public string Location { get; set; } = string.Empty;
 
         public Event? Event { get; set; }

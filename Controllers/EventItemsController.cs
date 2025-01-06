@@ -73,7 +73,7 @@ namespace my_event_backend.Controllers
                 Description = dbEvent.Description,
                 From = dbEvent.From,
                 To = dbEvent.To,
-                Price = dbEvent.Price,
+                Price = (int)dbEvent.Price,
                 Location = dbEvent.Location,
                 Event = dbEvent.Event
             };
