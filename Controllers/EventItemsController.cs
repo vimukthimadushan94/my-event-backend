@@ -83,12 +83,43 @@ namespace my_event_backend.Controllers
 
         // POST: api/EventItems
         [HttpPost]
-        public async Task<ActionResult<EventItem>> PostEventItem([FromBody] EventItem eventItem)
+        public async Task<ActionResult<EventItem>> PostEventItem([FromBody] EventItemDto eventItemDto)
         {
+            Console.WriteLine(eventItemDto);
+            var eventItem = new EventItem
+            {
+                EventId = eventItemDto.EventId,
+                Name = eventItemDto.Name,
+                Description = eventItemDto.Description,
+                From = eventItemDto.From,
+                To = eventItemDto.To,
+                Location = eventItemDto.Location,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
             _context.EventsItems.Add(eventItem);
+
             try
             {
                 await _context.SaveChangesAsync();
+                var participantIds = eventItemDto.Users
+                                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(id => id.Trim())
+                                    .ToList();
+
+                foreach (var userId in participantIds)
+                {
+                    var eventItemUser = new EventItemUser
+                    {
+                        EventItemId = eventItem.Id,
+                        UserId = userId
+                    };
+                    _context.EventItemUsers.Add(eventItemUser);
+                }
+
+                await _context.SaveChangesAsync();
+
             }
             catch (DbUpdateException)
             {
@@ -102,7 +133,11 @@ namespace my_event_backend.Controllers
                 }
             }
 
-            return CreatedAtAction("GetEventItem", new { id = eventItem.Id }, eventItem);
+            return CreatedAtAction("GetEventItem", new { id = eventItem.Id }, new EventItemDto
+            {
+                EventId = eventItem.EventId,
+                Name = eventItem.Name
+            });
         }
 
         // DELETE: api/EventItems/5

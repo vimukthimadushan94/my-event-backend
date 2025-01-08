@@ -29,11 +29,26 @@ namespace my_event_backend.Data
                     j => j.HasOne<Event>().WithMany().HasForeignKey("EventId"),
                     j => j.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId")
                 );
+
+            builder.Entity<EventItemUser>()
+                .HasKey(eiu => new { eiu.EventItemId, eiu.UserId });
+
+            builder.Entity<EventItemUser>()
+                .HasOne(eiu => eiu.EventItem)
+                .WithMany(ei => ei.EventItemUsers)
+                .HasForeignKey(eiu => eiu.EventItemId);
+
+            builder.Entity<EventItemUser>()
+                .HasOne(eiu => eiu.User)
+                .WithMany(u => u.EventItemUsers)
+                .HasForeignKey(eiu => eiu.UserId);
         }
 
         public DbSet<Event> Events {  get; set; }
 
         public DbSet<EventItem> EventsItems { get; set; }
+
+        public DbSet<EventItemUser> EventItemUsers { get; set; }
 
     }
 }

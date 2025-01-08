@@ -23,5 +23,7 @@ namespace my_event_backend.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; }
         public Event? Event { get; set; }
+
+        public List<EventItemUser> EventItemUsers { get; set; } = new List<EventItemUser>();
     }
 }
