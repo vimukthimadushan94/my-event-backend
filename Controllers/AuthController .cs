@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using my_event_backend.Dtos;
@@ -51,6 +52,61 @@ namespace my_event_backend.Controllers
             }).ToList();
 
             return Ok(userDtos);
+        }
+
+        [HttpPut("update-profile")]
+        [Authorize]
+        public async Task<IActionResult> updateProfile([FromForm] UpdateProfileDto updateProfileDto)
+        {
+            if(string.IsNullOrEmpty(updateProfileDto.FirstName))
+            {
+                return BadRequest("First name is required");
+            }
+
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            user.FirstName = updateProfileDto.FirstName;
+            user.LastName = updateProfileDto.LastName;
+
+            string profilePicturePath = null;
+            if(updateProfileDto.ProfilePicture != null)
+            {
+                var uploadsFolder = Path.Combine(Environment.CurrentDirectory, "uploads/profile-pictures");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(updateProfileDto.ProfilePicture.FileName);
+                profilePicturePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                var fileStream = new FileStream(profilePicturePath, FileMode.Create);
+                await updateProfileDto.ProfilePicture.CopyToAsync(fileStream);
+
+                user.ProfilePicturePath = $"/uploads/profile-pictures/{Path.GetFileName(profilePicturePath)}";
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(new
+            {
+                Message = "Profile updated successfully",
+                user,
+                ProfilePicturePath = profilePicturePath != null ? $"/uploads/profile-pictures/{Path.GetFileName(profilePicturePath)}" : null
+            });
+
         }
     }
 }
