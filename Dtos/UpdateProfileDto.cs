@@ -4,6 +4,6 @@
     {
         public string FirstName { get; set; }
         public string? LastName { get; set; }
-        public IFormFile ProfilePicture { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
     }
 }
