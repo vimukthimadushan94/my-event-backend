@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using my_event_backend.Dtos;
 using my_event_backend.Models;
+using System.Security.Claims;
 
 namespace my_event_backend.Controllers
 {
@@ -52,6 +53,31 @@ namespace my_event_backend.Controllers
             }).ToList();
 
             return Ok(userDtos);
+        }
+
+        [HttpGet("/api/Auth/profile")]
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            return Ok(new
+            {
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                email = user.Email,
+                profileImageUrl = user.ProfilePicturePath
+            });
         }
 
         [HttpPut("update-profile")]
