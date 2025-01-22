@@ -129,8 +129,9 @@ namespace my_event_backend.Controllers
             return Ok(new
             {
                 Message = "Profile updated successfully",
-                user,
-                ProfilePicturePath = profilePicturePath != null ? $"/uploads/profile-pictures/{Path.GetFileName(profilePicturePath)}" : null
+                user.FirstName,
+                user.LastName,
+                user.ProfilePicturePath
             });
 
         }
