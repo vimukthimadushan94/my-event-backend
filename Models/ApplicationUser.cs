@@ -11,7 +11,9 @@ namespace my_event_backend.Models
         public string? ProfilePicturePath { get; set; }
         public List<Event> Events { get; set; } = new List<Event>();
 
-        public List<EventItemUser> EventItemUsers { get; set; } = new List<EventItemUser>();
+        public List<EventItemUser> EventItemUsers { get; } = [];
+
+        public List<EventItem> EventItems { get; } = [];
 
     }
 }

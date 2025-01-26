@@ -1,15 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace my_event_backend.Models
 {
+    [Keyless]
     public class EventItemUser
     {
-        public string EventItemId { get; set; }
-        [ForeignKey("EventItemId")]
-        public EventItem EventItem { get; set; }
-
-        public string UserId { get; set; }
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
+        public string UserId { get; set; }
+
+
+        [ForeignKey("EventItemId")]
+        public string EventItemId { get; set; }
+       
+        public ApplicationUser ApplicationUser { get; set; } = null!;
+        public EventItem EventItem { get; set; } = null!;
+
     }
 }

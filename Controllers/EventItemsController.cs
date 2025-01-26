@@ -37,8 +37,10 @@ namespace my_event_backend.Controllers
         public async Task<ActionResult<EventItem>> GetEventItem(string id)
         {
             var eventItem = await _context.EventsItems
-                .Include(i => i.Event)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                        .Include(i => i.Event) // Include the related Event
+                        .Include(i => i.Users) // Include the intermediate table
+                        //.ThenInclude(eiu => eiu.ApplicationUser) // Include related ApplicationUser
+                        .FirstOrDefaultAsync(e => e.Id == id);
 
             if (eventItem == null)
             {

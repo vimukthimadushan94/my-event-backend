@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using my_event_backend.Data;
+using my_event_backend.Dtos;
 using my_event_backend.Models;
 
 namespace my_event_backend.Controllers
@@ -92,8 +93,28 @@ namespace my_event_backend.Controllers
         {
             var eventItems = await _context.EventsItems
                 .Where(x => x.EventId == id)
+                .Include(e => e.EventItemUsers)
+                .ThenInclude(eiu => eiu.ApplicationUser)
                 .ToListAsync();
-            return Ok(eventItems);
+
+            var eventItemDtos = eventItems.Select(item => new EventItemDto
+            {
+                Name = item.Name,
+                Description = item.Description,
+                From = item.From,
+                To = item.To,
+                Location = item.Location,
+                EventItemUsers = item.EventItemUsers.Select(eiu => new UserDto
+                {
+                    Id = eiu.ApplicationUser.Id,
+                    FirstName = eiu.ApplicationUser.FirstName,
+                    LastName = eiu.ApplicationUser.LastName,
+                    Email = eiu.ApplicationUser.Email,
+                    ProfilePicturePath = eiu.ApplicationUser.ProfilePicturePath,
+                }).ToList()
+            });
+
+            return Ok(eventItemDtos);
         }
     }
 }

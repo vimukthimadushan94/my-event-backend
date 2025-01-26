@@ -39,7 +39,7 @@ namespace my_event_backend.Data
                 .HasForeignKey(eiu => eiu.EventItemId);
 
             builder.Entity<EventItemUser>()
-                .HasOne(eiu => eiu.User)
+                .HasOne(eiu => eiu.ApplicationUser)
                 .WithMany(u => u.EventItemUsers)
                 .HasForeignKey(eiu => eiu.UserId);
         }
