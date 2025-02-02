@@ -37,9 +37,9 @@ namespace my_event_backend.Controllers
         public async Task<ActionResult<EventItem>> GetEventItem(string id)
         {
             var eventItem = await _context.EventsItems
-                        .Include(i => i.Event) // Include the related Event
-                        .Include(i => i.Users) // Include the intermediate table
-                        //.ThenInclude(eiu => eiu.ApplicationUser) // Include related ApplicationUser
+                        .Include(i => i.Event) 
+                        .Include(i => i.Users) 
+                        //.ThenInclude(eiu => eiu.ApplicationUser)
                         .FirstOrDefaultAsync(e => e.Id == id);
 
             if (eventItem == null)
@@ -87,7 +87,6 @@ namespace my_event_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<EventItem>> PostEventItem([FromBody] EventItemDto eventItemDto)
         {
-            Console.WriteLine(eventItemDto);
             var eventItem = new EventItem
             {
                 EventId = eventItemDto.EventId,
@@ -101,6 +100,9 @@ namespace my_event_backend.Controllers
             };
 
             _context.EventsItems.Add(eventItem);
+            await _context.SaveChangesAsync();
+
+            var eventItemId = eventItem.Id;
 
             try
             {
@@ -114,7 +116,7 @@ namespace my_event_backend.Controllers
                 {
                     var eventItemUser = new EventItemUser
                     {
-                        EventItemId = eventItem.Id,
+                        EventItemId = eventItemId,
                         UserId = userId
                     };
                     _context.EventItemUsers.Add(eventItemUser);
@@ -135,7 +137,7 @@ namespace my_event_backend.Controllers
                 }
             }
 
-            return CreatedAtAction("GetEventItem", new { id = eventItem.Id }, new EventItemDto
+            return CreatedAtAction("GetEventItem", new { id = eventItemId }, new EventItemDto
             {
                 EventId = eventItem.EventId,
                 Name = eventItem.Name
@@ -155,7 +157,7 @@ namespace my_event_backend.Controllers
             _context.EventsItems.Remove(eventItem);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         private bool EventItemExists(string id)

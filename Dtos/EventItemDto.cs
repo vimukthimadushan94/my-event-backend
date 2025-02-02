@@ -4,6 +4,7 @@ namespace my_event_backend.Dtos
 {
     public class EventItemDto
     {
+        public string? Id { get; set; }
         public int EventId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }

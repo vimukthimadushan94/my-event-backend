@@ -99,6 +99,7 @@ namespace my_event_backend.Controllers
 
             var eventItemDtos = eventItems.Select(item => new EventItemDto
             {
+                Id = item.Id,
                 Name = item.Name,
                 Description = item.Description,
                 From = item.From,
