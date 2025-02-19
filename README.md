@@ -1,6 +1,6 @@
 ﻿# ASP.NET Backend Application
 
-This is a **backend application** built with **ASP.NET Web API**, providing a secure and scalable RESTful API for client applications. It follows modern development practices and integrates seamlessly with frontend applications.
+This is a **backend application** built with **ASP.NET Web API**, providing a secure and scalable RESTful API for client applications.
 
 ## Video Tutorial
 
